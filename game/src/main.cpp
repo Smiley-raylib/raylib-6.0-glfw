@@ -1,39 +1,66 @@
 #include "raylib.h"
 #include "raymath.h"
+#include "raygui.h"
 
-void GameInit()
+struct App
+{
+    // Insert data here
+};
+
+void AppLoad(App* app)
 {
     InitWindow(800, 800, "Game");
     SetTargetFPS(60);
 }
 
-void GameUnload()
+void AppUnload(App* app)
 {
     CloseWindow();
 }
 
-void GameUpdate(float dt)
+void AppUpdate(App* app, float dt)
 {
+    static bool is_first_frame = true;
+    if (!is_first_frame)
+    {
+        // Do stuff
+    }
+    else
+        is_first_frame = false;
 }
 
-void GameDraw()
+void AppDraw(App* app)
 {
     BeginDrawing();
     ClearBackground(WHITE);
+
     DrawCircleV(GetMousePosition(), 20.0f, RED);
+
+    static bool showMessageBox = false;
+    if (GuiButton( { 24, 24, 120, 30 }, "#191#Show Message"))
+        showMessageBox = true;
+
+    if (showMessageBox)
+    {
+        int result = GuiMessageBox( { 85, 70, 250, 100 }, "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
+        if (result >= 0)
+            showMessageBox = false;
+    }
+
     EndDrawing();
 }
 
 int main()
 {
-    GameInit();
+    App app;
+    AppLoad(&app);
 
     while (!WindowShouldClose())
     {
-        GameUpdate(GetFrameTime());
-        GameDraw();
+        AppUpdate(&app, GetFrameTime());
+        AppDraw(&app);
     }
 
-    GameUnload();
+    AppUnload(&app);
     return 0;
 }
